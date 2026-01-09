@@ -9,7 +9,10 @@ from aiogram.types import Message, BufferedInputFile
 from aiogram.filters import Command, CommandStart
 from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
-from config import TOKEN, WEATHER_KEY
+import os
+
+TOKEN = os.environ.get("BOT_TOKEN")
+WEATHER_KEY = os.environ.get("WEATHER_KEY")
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
