@@ -11,6 +11,9 @@ from aiogram.fsm.state import StatesGroup, State
 from aiogram.fsm.context import FSMContext
 import os
 
+import threading
+from http.server import BaseHTTPRequestHandler, HTTPServer
+
 TOKEN = os.environ.get("BOT_TOKEN")
 WEATHER_KEY = os.environ.get("WEATHER_KEY")
 
@@ -276,6 +279,18 @@ async def graphs(msg: Message):
 
 async def main():
     await dp.start_polling(bot)
+
+def run_dummy_server():
+    class Handler(BaseHTTPRequestHandler):
+        def do_GET(self):
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"ok")
+
+    server = HTTPServer(("0.0.0.0", 8080), Handler)
+    server.serve_forever()
+
+threading.Thread(target=run_dummy_server, daemon=True).start()
 
 if __name__ == "__main__":
     asyncio.run(main())
